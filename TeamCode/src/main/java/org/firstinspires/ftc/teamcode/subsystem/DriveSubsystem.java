@@ -63,6 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Optional telemetry updates
         telemetry.addData("Drive Motors", "Left (%.2f), Right (%.2f)", left, right);
+        telemetry.update();
     }
 
     public void stop() {
