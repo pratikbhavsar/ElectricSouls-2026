@@ -20,9 +20,8 @@ public class DriveSubsystem extends SubsystemBase {
         this.backLeft = new MotorEx(hardwareMap, "backLeft");
         this.backRight = new MotorEx(hardwareMap, "backRight");
 
-        // Reversing left side matching the logic in the sample OpMode
         backLeft.setInverted(true);
-        backRight.setInverted(false);
+        backRight.setInverted(true);
 
         // Switch to RawPower to accept values from -1.0 to 1.0 (percent power)
         backLeft.setRunMode(Motor.RunMode.RawPower);
