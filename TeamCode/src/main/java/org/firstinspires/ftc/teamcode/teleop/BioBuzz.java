@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.subsystem.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.LauncherSubsystem;
 
 @TeleOp(name = "BioBuzz TeleOp")
 public class BioBuzz extends CommandOpMode {
@@ -17,6 +18,7 @@ public class BioBuzz extends CommandOpMode {
     // 1. Declare your subsystems and controllers here
     private DriveSubsystem driveSubsystem;
     private IntakeSubsystem intakeSubsystem;
+    private LauncherSubsystem launcherSubsystem;
     private GamepadEx gamePad1;
 
     @Override
@@ -24,6 +26,7 @@ public class BioBuzz extends CommandOpMode {
         // 1. Initialize your DriveSubsystem
         driveSubsystem = new DriveSubsystem(hardwareMap, telemetry);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
+        launcherSubsystem = new LauncherSubsystem(hardwareMap,"launcher", telemetry);
         gamePad1 = new GamepadEx(gamepad1);
 
         // 2. Set up the default driving command using a RunCommand loop
@@ -40,6 +43,13 @@ public class BioBuzz extends CommandOpMode {
 
         gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
                 new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
+        );
+        gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+                new StartEndCommand(launcherSubsystem::launch, launcherSubsystem::stop, launcherSubsystem)
+
+        );
+        gamePad1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
+                new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
         );
 
     }

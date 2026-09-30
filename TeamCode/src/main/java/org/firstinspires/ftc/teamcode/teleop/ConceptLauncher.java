@@ -22,7 +22,7 @@ public class ConceptLauncher extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         // 3. Instantiate hardware and setup your button bindings
-        launcher = new LauncherSubsystem(hardwareMap, "launcher");
+        launcher = new LauncherSubsystem(hardwareMap, "launcher", telemetry);
         gamepadOne = new GamepadEx(gamepad1);
 
         // Schedule / Register your subsystems here...

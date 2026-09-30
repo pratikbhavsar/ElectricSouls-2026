@@ -1,20 +1,27 @@
 package org.firstinspires.ftc.teamcode.subsystem;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class LauncherSubsystem extends SubsystemBase {
     private final MotorEx launcherMotor;
 
-    // Target velocities in Encoder Ticks per Second
-    private static final double TARGET_LAUNCH_VELOCITY = 500.0;
+    private final CRServo launcherServo;
+    private final Telemetry telemetry;
 
-    public LauncherSubsystem(final HardwareMap hardwareMap, final String motorName) {
+    // Target velocities in Encoder Ticks per Second
+    private static final double TARGET_LAUNCH_VELOCITY = 1000.0;
+
+    public LauncherSubsystem(final HardwareMap hardwareMap, final String motorName, Telemetry telemetry) {
         // Initialize the single MotorEx instance
         this.launcherMotor = new MotorEx(hardwareMap, motorName);
-
+        this.telemetry = telemetry;
+        this.launcherServo =  hardwareMap.get(CRServo.class, "launcherServo");
         // Switch RunMode to Velocity control for closed-loop PID precision
         this.launcherMotor.setRunMode(Motor.RunMode.VelocityControl);
 
@@ -25,10 +32,17 @@ public class LauncherSubsystem extends SubsystemBase {
         this.launcherMotor.setInverted(false);
     }
 
-    /**
-     * Sets a precise target velocity for the single flywheel motor.
-     * @param ticksPerSecond Target speed in encoder counts per second
-     */
+
+    public void pushBall(){
+        launcherServo.setPower(0.5);
+        telemetry.addData("launcher servo","power %.2f", launcherServo.getPower());
+        telemetry.update();
+    }
+    public void stopServo () {
+        launcherServo.setPower(0);
+        telemetry.addData("launcher servo","power %.2f", launcherServo.getPower());
+        telemetry.update();
+    }
     private void setVelocity(double ticksPerSecond) {
         launcherMotor.setVelocity(ticksPerSecond);
     }
