@@ -34,7 +34,9 @@ public class LauncherSubsystem extends SubsystemBase {
 
 
     public void pushBall(){
-        launcherServo.setPower(0.5);
+        telemetry.addData("Setting Servo power To 1","");
+        telemetry.update();
+        launcherServo.setPower(1.0);
         telemetry.addData("launcher servo","power %.2f", launcherServo.getPower());
         telemetry.update();
     }
