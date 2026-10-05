@@ -47,7 +47,11 @@ public class BioBuzz extends CommandOpMode {
                 new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
         );
         gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
-                new StartEndCommand(launcherSubsystem::launch, launcherSubsystem::stop, launcherSubsystem)
+                new StartEndCommand(launcherSubsystem::launch)
+
+        );
+        gamePad1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+                new StartEndCommand(launcherSubsystem::stop)
 
         );
         gamePad1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
