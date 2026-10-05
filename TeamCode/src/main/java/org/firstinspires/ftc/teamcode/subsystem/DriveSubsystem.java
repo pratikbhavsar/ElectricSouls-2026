@@ -30,8 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     /**
      * Drives the robot using POV/Arcade control logic.
-     * @param drive Forward/backward movement (-1.0 to 1.0)
-     * @param turn Turning movement (-1.0 to 1.0)
+     * @param rotate Forward/backward movement (-1.0 to 1.0)
+     * @param forward Turning movement (-1.0 to 1.0)
      */
     public void drive(double forward, double rotate) {
 /* Set the drive and turn variables to follow the joysticks on the gamepad.
