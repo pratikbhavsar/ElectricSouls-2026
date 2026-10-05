@@ -55,7 +55,7 @@ public class BioBuzz extends CommandOpMode {
         );
 
         @Override
-        public void run() {
+        public void run(){
             gamePad1.readButtons();
             super.run();
             telemetry.update();
