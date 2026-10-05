@@ -54,11 +54,12 @@ public class BioBuzz extends CommandOpMode {
                 new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
         );
 
-        @Override
-        public void run(){
-            gamePad1.readButtons();
-            super.run();
-            telemetry.update();
-        }
+
+    }
+    @Override
+    public void run(){
+        gamePad1.readButtons();
+        super.run();
+        telemetry.update();
     }
 }
