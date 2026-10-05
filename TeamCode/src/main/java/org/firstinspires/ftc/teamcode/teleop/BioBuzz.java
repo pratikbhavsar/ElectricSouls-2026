@@ -38,19 +38,21 @@ public class BioBuzz extends CommandOpMode {
 
                     // Pass the inputs straight to your subsystem method
                     driveSubsystem.drive(drive, turn);
+                    gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
+                            new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
+                    );
+                    gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+                            new StartEndCommand(launcherSubsystem::launch, launcherSubsystem::stop, launcherSubsystem)
+
+                    );
+                    gamePad1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
+                            new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
+                    );
                 }, driveSubsystem) // Passing driveSubsystem declares it as a requirement
-        );
-
-        gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
-                new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
-        );
-        gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
-                new StartEndCommand(launcherSubsystem::launch, launcherSubsystem::stop, launcherSubsystem)
 
         );
-        gamePad1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
-                new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
-        );
+
+
 
     }
 }
