@@ -38,7 +38,9 @@ public class BioBuzz extends CommandOpMode {
 
                     // Pass the inputs straight to your subsystem method
                     driveSubsystem.drive(drive, turn);
+
                 }, driveSubsystem) // Passing driveSubsystem declares it as a requirement
+
         );
 
         gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
@@ -52,5 +54,11 @@ public class BioBuzz extends CommandOpMode {
                 new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
         );
 
+        @Override
+        public void run(){
+            gamePad1.readButtons();
+            super.run();
+            telemetry.update();
+        }
     }
 }
