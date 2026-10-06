@@ -12,7 +12,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     private final DcMotorEx motor;
     private final Telemetry telemetry;
 
-    private static final double LAUNCH_POWER = 1.0; // tune this
+    private static final double LAUNCH_POWER = 0.5;// tune this
 
     public FlywheelSubsystem(HardwareMap hardwareMap, String motorName, Telemetry telemetry) {
         this.telemetry = telemetry;

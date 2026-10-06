@@ -17,17 +17,17 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.intakemotor = new MotorEx(hardwareMap, "intakeMotor");
         intakemotor.setInverted(true);
-       this.intakeservoleft = hardwareMap.get(CRServo.class,"servoLeft");
-       this.intakeservoright = hardwareMap.get(CRServo.class,"servoRight");
+        this.intakeservoleft = hardwareMap.get(CRServo.class,"servoLeft");
+        this.intakeservoright = hardwareMap.get(CRServo.class,"servoRight");
 
-       this.intakeservoright.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.intakeservoright.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
     public void in ()
     {
-        intakemotor.setVelocity(1700);
-       intakeservoleft.setPower(0.5);
+        intakemotor.setVelocity(1000);
+        intakeservoleft.setPower(0.5);
         intakeservoright.setPower(0.5);
     }
     public void stop (){
