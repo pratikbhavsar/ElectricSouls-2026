@@ -6,44 +6,64 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
 @Disabled
-public class MecanumDriveSubsystem extends OpMode {
+public class MecanumDriveSubsystem extends SubsystemBase {
     // This declares the four motors needed
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
+    private MotorEx frontLeft;
+    private MotorEx frontRight;
+    private MotorEx backLeft;
+    private MotorEx backRight;
+
+    private Telemetry telemetry;
 
     // This declares the IMU needed to get the current direction the robot is facing
     IMU imu;
 
-    @Override
-    public void init() {
-        frontLeft = hardwareMap.get(DcMotor.class, "front_left_drive");
-        frontRight = hardwareMap.get(DcMotor.class, "front_right_drive");
-        backLeft = hardwareMap.get(DcMotor.class, "back_left_drive");
-        backRight = hardwareMap.get(DcMotor.class, "back_right_drive");
+    public MecanumDriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+
+        // Match the hardware map names from your previous file ("backLeft", "backRight")
+        this.backLeft = new MotorEx(hardwareMap, "backLeft");
+        this.backRight = new MotorEx(hardwareMap, "backRight");
+        this.frontLeft = new MotorEx(hardwareMap, "frontLeft");
+        this.frontRight = new MotorEx(hardwareMap, "frontRight");
+
+        backLeft.setInverted(true);
+        backRight.setInverted(true);
+        frontLeft.setInverted(true);
+        frontRight.setInverted(true);
+
+        // Switch to RawPower to accept values from -1.0 to 1.0 (percent power)
+        backLeft.setRunMode(Motor.RunMode.RawPower);
+        backRight.setRunMode(Motor.RunMode.RawPower);
+        frontRight.setRunMode(Motor.RunMode.RawPower);
+        frontLeft.setRunMode(Motor.RunMode.RawPower);
 
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder
-        // wires, you should remove these
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backLeft.setDirection(MotorEx.Direction.REVERSE);
+        //frontLeft.setDirection(MotorEx.Direction.REVERSE);
+
+        //frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         imu = hardwareMap.get(IMU.class, "imu");
-        // This needs to be changed to match the orientation on your robot
+
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
@@ -52,30 +72,10 @@ public class MecanumDriveSubsystem extends OpMode {
         RevHubOrientationOnRobot orientationOnRobot = new
                 RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+
     }
 
-    @Override
-    public void loop() {
-        telemetry.addLine("Press A to reset Yaw");
-        telemetry.addLine("Hold left bumper to drive in robot relative");
-        telemetry.addLine("The left joystick sets the robot direction");
-        telemetry.addLine("Moving the right joystick left and right turns the robot");
-
-        // If you press the A button, then you reset the Yaw to be zero from the way
-        // the robot is currently pointing
-        if (gamepad1.a) {
-            imu.resetYaw();
-        }
-        // If you press the left bumper, you get a drive from the point of view of the robot
-        // (much like driving an RC vehicle)
-        if (gamepad1.left_bumper) {
-            drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        } else {
-            driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        }
-    }
-
-    // This routine drives the robot field relative
     private void driveFieldRelative(double forward, double right, double rotate) {
         // First, convert direction being asked to drive to polar coordinates
         double theta = Math.atan2(forward, right);
@@ -93,10 +93,8 @@ public class MecanumDriveSubsystem extends OpMode {
         drive(newForward, newRight, rotate);
     }
 
-    // Thanks to FTC16072 for sharing this code!!
     public void drive(double forward, double right, double rotate) {
-        // This calculates the power needed for each wheel based on the amount of forward,
-        // strafe right, and rotate
+
         double frontLeftPower = forward + right + rotate;
         double frontRightPower = forward - right - rotate;
         double backRightPower = forward + right - rotate;
@@ -116,12 +114,14 @@ public class MecanumDriveSubsystem extends OpMode {
         // We multiply by maxSpeed so that it can be set lower for outreaches
         // When a young child is driving the robot, we may not want to allow full
         // speed.
-        frontLeft.setPower(maxSpeed * (frontLeftPower / maxPower));
-        frontRight.setPower(maxSpeed * (frontRightPower / maxPower));
-        backLeft.setPower(maxSpeed * (backLeftPower / maxPower));
-        backRight.setPower(maxSpeed * (backRightPower / maxPower));
-    }
+        frontLeft.set(maxSpeed * (frontLeftPower / maxPower));
+        frontRight.set(maxSpeed * (frontRightPower / maxPower));
+        backLeft.set(maxSpeed * (backLeftPower / maxPower));
+        backRight.set(maxSpeed * (backRightPower / maxPower));
 
-    public void setDefaultCommand(RunCommand runCommand) {
     }
 }
+
+
+
+        // This needs to be changed to match the orientation on your robot

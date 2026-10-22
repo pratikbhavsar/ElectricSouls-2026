@@ -32,7 +32,7 @@ public class  BioBuzz extends CommandOpMode {
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         launcherSubsystem = new LauncherSubsystem(hardwareMap,"launcher", telemetry);
         flywheelSubsystem = new FlywheelSubsystem(hardwareMap, "launcher", telemetry);
-        mecanumDriveSubsystem = new MecanumDriveSubsystem();
+        mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         gamePad1 = new GamepadEx(gamepad1);
 
         // 2. Set up the default driving command using a RunCommand loop
