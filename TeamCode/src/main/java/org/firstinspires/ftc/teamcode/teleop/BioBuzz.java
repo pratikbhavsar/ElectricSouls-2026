@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystem.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.LauncherSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.MecanumDriveSubsystem;
 
 @TeleOp(name = "BioBuzz TeleOp")
 public class  BioBuzz extends CommandOpMode {
@@ -21,6 +22,7 @@ public class  BioBuzz extends CommandOpMode {
     private IntakeSubsystem intakeSubsystem;
     private LauncherSubsystem launcherSubsystem;
     private FlywheelSubsystem flywheelSubsystem;
+    private MecanumDriveSubsystem mecanumDriveSubsystem;
     private GamepadEx gamePad1;
 
     @Override
@@ -30,10 +32,11 @@ public class  BioBuzz extends CommandOpMode {
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         launcherSubsystem = new LauncherSubsystem(hardwareMap,"launcher", telemetry);
         flywheelSubsystem = new FlywheelSubsystem(hardwareMap, "launcher", telemetry);
+        mecanumDriveSubsystem = new MecanumDriveSubsystem();
         gamePad1 = new GamepadEx(gamepad1);
 
         // 2. Set up the default driving command using a RunCommand loop
-        driveSubsystem.setDefaultCommand(
+        mecanumDriveSubsystem.setDefaultCommand(
                 new RunCommand(() -> {
                     // Read inputs (Inverting stick Y because pushing up is natively negative)
                     double drive = -gamepad1.left_stick_y;
