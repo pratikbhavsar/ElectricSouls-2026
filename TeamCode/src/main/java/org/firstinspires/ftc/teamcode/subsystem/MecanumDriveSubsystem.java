@@ -56,18 +56,21 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         //backLeft.setDirection(MotorEx.Direction.REVERSE);
         //frontLeft.setDirection(MotorEx.Direction.REVERSE);
 
+        //Sets encoder. We are not using an encoder right now so we leave this out
+
         //frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //Calibrates IMU. Set USB and logo facing direction to your actual hub orientation
 
         imu = hardwareMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         RevHubOrientationOnRobot orientationOnRobot = new
                 RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -76,20 +79,21 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
     }
 
-    private void driveFieldRelative(double forward, double right, double rotate) {
-        // First, convert direction being asked to drive to polar coordinates
+    //This function adds field relative driving functionality to the robot. This relies on drive subsystem.
+    public void driveFieldRelative(double forward, double right, double rotate) {
+        // convert direction to drive to polar coordinates
         double theta = Math.atan2(forward, right);
         double r = Math.hypot(right, forward);
 
-        // Second, rotate angle by the angle the robot is pointing
+        // rotate angle by the angle the robot is pointing
         theta = AngleUnit.normalizeRadians(theta -
                 imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
 
-        // Third, convert back to cartesian
+        // convert back to Cartesian
         double newForward = r * Math.sin(theta);
         double newRight = r * Math.cos(theta);
 
-        // Finally, call the drive method with robot relative forward and right amounts
+        // call the drive method with robot relative forward and right amounts
         drive(newForward, newRight, rotate);
     }
 
@@ -103,17 +107,15 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         double maxPower = 1.0;
         double maxSpeed = 1.0;  // make this slower for outreaches
 
-        // This is needed to make sure we don't pass > 1.0 to any wheel
-        // It allows us to keep all of the motors in proportion to what they should
-        // be and not get clipped
+        //prevent motors from crossing 1.0 and exploding
+
         maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(frontRightPower));
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
 
-        // We multiply by maxSpeed so that it can be set lower for outreaches
-        // When a young child is driving the robot, we may not want to allow full
-        // speed.
+        //set max speed
+
         frontLeft.set(maxSpeed * (frontLeftPower / maxPower));
         frontRight.set(maxSpeed * (frontRightPower / maxPower));
         backLeft.set(maxSpeed * (backLeftPower / maxPower));
