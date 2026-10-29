@@ -15,7 +15,7 @@ public class LauncherSubsystem extends SubsystemBase {
     private final Telemetry telemetry;
 
     // Target velocities in Encoder Ticks per Second
-    private static final double TARGET_LAUNCH_VELOCITY = 1000.0;
+    private static final double TARGET_LAUNCH_VELOCITY = 800.0;
 
     public LauncherSubsystem(final HardwareMap hardwareMap, final String motorName, Telemetry telemetry) {
         // Initialize the single MotorEx instance
@@ -53,7 +53,7 @@ public class LauncherSubsystem extends SubsystemBase {
      * Spins up the flywheel to the target launching velocity.
      */
     public void launch() {
-        setVelocity(TARGET_LAUNCH_VELOCITY);
+        launcherMotor.setVelocity(TARGET_LAUNCH_VELOCITY);
     }
 
     /**
