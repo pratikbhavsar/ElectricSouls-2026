@@ -27,7 +27,7 @@ public class  BioBuzz extends CommandOpMode {
     public void initialize() {
         // 1. Initialize your DriveSubsystem
         driveSubsystem = new DriveSubsystem(hardwareMap, telemetry);
-        intakeSubsystem = new IntakeSubsystem(hardwareMap);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
         launcherSubsystem = new LauncherSubsystem(hardwareMap,"launcher", telemetry);
         flywheelSubsystem = new FlywheelSubsystem(hardwareMap, "launcher", telemetry);
         gamePad1 = new GamepadEx(gamepad1);
@@ -45,7 +45,7 @@ public class  BioBuzz extends CommandOpMode {
         );
 
         gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
-                new StartEndCommand(intakeSubsystem::intake,intakeSubsystem::stop,intakeSubsystem)
+                new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
         );
         gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new StartEndCommand(flywheelSubsystem::launch,flywheelSubsystem::stop, flywheelSubsystem)
