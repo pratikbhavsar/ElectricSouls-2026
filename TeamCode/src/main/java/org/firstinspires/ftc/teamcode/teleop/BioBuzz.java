@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.subsystem.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.LauncherSubsystem;
-import org.firstinspires.ftc.teamcode.subsystem.MecanumDriveSubsystem;
 
 @TeleOp(name = "BioBuzz TeleOp")
 public class  BioBuzz extends CommandOpMode {
@@ -22,7 +21,6 @@ public class  BioBuzz extends CommandOpMode {
     private IntakeSubsystem intakeSubsystem;
     private LauncherSubsystem launcherSubsystem;
     private FlywheelSubsystem flywheelSubsystem;
-    private MecanumDriveSubsystem mecanumDriveSubsystem;
     private GamepadEx gamePad1;
 
     @Override
@@ -32,24 +30,22 @@ public class  BioBuzz extends CommandOpMode {
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         launcherSubsystem = new LauncherSubsystem(hardwareMap,"launcher", telemetry);
         flywheelSubsystem = new FlywheelSubsystem(hardwareMap, "launcher", telemetry);
-        mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         gamePad1 = new GamepadEx(gamepad1);
 
         // 2. Set up the default driving command using a RunCommand loop
-        mecanumDriveSubsystem.setDefaultCommand(
+        driveSubsystem.setDefaultCommand(
                 new RunCommand(() -> {
                     // Read inputs (Inverting stick Y because pushing up is natively negative)
-                    double forward = -gamepad1.left_stick_y;
-                    double right = gamepad1.left_stick_x;
-                    double rotate = gamepad1.right_stick_x;
+                    double drive = -gamepad1.left_stick_y;
+                    double turn = gamepad1.right_stick_x;
 
                     // Pass the inputs straight to your subsystem method
-                    mecanumDriveSubsystem.driveFieldRelative(forward, right, rotate);
-                }, mecanumDriveSubsystem) // Passing driveSubsystem declares it as a requirement
+                    driveSubsystem.drive(drive, turn);
+                }, driveSubsystem) // Passing driveSubsystem declares it as a requirement
         );
 
         gamePad1.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
-                new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
+                new StartEndCommand(intakeSubsystem::intake,intakeSubsystem::stop,intakeSubsystem)
         );
         gamePad1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new StartEndCommand(flywheelSubsystem::launch,flywheelSubsystem::stop, flywheelSubsystem)
@@ -57,6 +53,7 @@ public class  BioBuzz extends CommandOpMode {
         gamePad1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
                 new StartEndCommand(launcherSubsystem::pushBall, launcherSubsystem::stopServo, launcherSubsystem)
         );
+
 
     }
     @Override
