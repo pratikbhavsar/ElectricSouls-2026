@@ -6,15 +6,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
 @Disabled
@@ -39,9 +41,9 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         this.frontLeft = new MotorEx(hardwareMap, "frontLeft");
         this.frontRight = new MotorEx(hardwareMap, "frontRight");
 
-        backLeft.setInverted(true);
+        backLeft.setInverted(false);
         backRight.setInverted(true);
-        frontLeft.setInverted(true);
+        frontLeft.setInverted(false);
         frontRight.setInverted(true);
 
         // Switch to RawPower to accept values from -1.0 to 1.0 (percent power)
@@ -53,8 +55,8 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
 
-        //backLeft.setDirection(MotorEx.Direction.REVERSE);
-        //frontLeft.setDirection(MotorEx.Direction.REVERSE);
+        // Doesn't work. // backLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        //frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
 
         //Sets encoder. We are not using an encoder right now so we leave this out
 
@@ -68,9 +70,9 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         imu = hardwareMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         RevHubOrientationOnRobot orientationOnRobot = new
                 RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -99,13 +101,13 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
     public void drive(double forward, double right, double rotate) {
 
-        double frontLeftPower = forward + right + rotate;
-        double frontRightPower = forward - right - rotate;
+        double frontLeftPower = ((forward + right + rotate)*-1);
+        double frontRightPower = (forward - right - rotate);
         double backRightPower = forward + right - rotate;
-        double backLeftPower = forward - right + rotate;
+        double backLeftPower = ((forward - right + rotate)*-1);
 
-        double maxPower = 1.0;
-        double maxSpeed = 1.0;  // make this slower for outreaches
+        double maxPower = 0.5;
+        double maxSpeed = 0.5;  // make this slower for outreaches
 
         //prevent motors from crossing 1.0 and exploding
 

@@ -7,13 +7,13 @@ import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.subsystem.LauncherSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.PushBallSubsystem;
 
 @TeleOp(name = "Launcher Subsystem")
 public class ConceptLauncher extends CommandOpMode {
 
     // 1. Declare your subsystems and controllers here
-    private LauncherSubsystem launcher;
+    private PushBallSubsystem launcher;
     private GamepadEx gamepadOne;
 
     @Override
@@ -22,7 +22,7 @@ public class ConceptLauncher extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         // 3. Instantiate hardware and setup your button bindings
-        launcher = new LauncherSubsystem(hardwareMap, "launcher", telemetry);
+        launcher = new PushBallSubsystem(hardwareMap, "launcher", telemetry);
         gamepadOne = new GamepadEx(gamepad1);
 
         // Schedule / Register your subsystems here...

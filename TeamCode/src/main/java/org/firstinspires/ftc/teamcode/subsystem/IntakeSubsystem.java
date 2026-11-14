@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class IntakeSubsystem extends SubsystemBase {
     private final DcMotorEx intakemotor;
-    private final CRServo intakeservoleft;
-    private final CRServo intakeservoright;
+    //private final CRServo intakeservoleft;
+    //private final CRServo intakeservoright;
 
     private final Telemetry telemetry;
 
@@ -31,10 +31,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
 
         intakemotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.intakeservoleft = hardwareMap.get(CRServo.class,"servoLeft");
-        this.intakeservoright = hardwareMap.get(CRServo.class,"servoRight");
-
-        this.intakeservoright.setDirection(DcMotorSimple.Direction.REVERSE);
+        //this.intakeservoleft = hardwareMap.get(CRServo.class,"servoLeft");
+        //this.intakeservoright = hardwareMap.get(CRServo.class,"servoRight");
+//
+//        this.intakeservoright.setDirection(DcMotorSimple.Direction.REVERSE);
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
     }
@@ -42,13 +42,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public void in ()
     {
         intakemotor.setVelocity(1000);
-        intakeservoleft.setPower(0.5);
-        intakeservoright.setPower(0.5);
+        //intakeservoleft.setPower(0.5);
+        //intakeservoright.setPower(0.5);
     }
     public void stop (){
         intakemotor.setVelocity(0);
-        intakeservoleft.setPower(0);
-        intakeservoright.setPower(0);
+//        intakeservoleft.setPower(0);
+//        intakeservoright.setPower(0);
     }
     @Override
     public void periodic() {
