@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class DriveSubsystem extends SubsystemBase {
     private MotorEx backLeft;
     private MotorEx backRight;
-    //private MotorEx frontLeft;
-    //private MotorEx frontRight;
+    private MotorEx frontLeft;
+    private MotorEx frontRight;
     private Telemetry telemetry;
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -21,18 +21,18 @@ public class DriveSubsystem extends SubsystemBase {
         // Match the hardware map names from your previous file ("backLeft", "backRight")
         this.backLeft = new MotorEx(hardwareMap, "backLeft");
         this.backRight = new MotorEx(hardwareMap, "backRight");
-        //this.frontLeft = new MotorEx(hardwareMap, "frontLeft");
-        //this.frontRight = new MotorEx(hardwareMap, "frontRight");
+        this.frontLeft = new MotorEx(hardwareMap, "frontLeft");
+        this.frontRight = new MotorEx(hardwareMap, "frontRight");
 
         backLeft.setInverted(false);
-        backRight.setInverted(true);
-        //frontRight.setInverted(true);
-        //frontLeft.setInverted(true);0
+        backRight.setInverted(false);
+//        frontRight.setInverted(false);
+//        frontLeft.setInverted(false);
         // Switch to RawPower to accept values from -1.0 to 1.0 (percent power)
         backLeft.setRunMode(Motor.RunMode.RawPower);
         backRight.setRunMode(Motor.RunMode.RawPower);
-        //frontLeft.setRunMode(Motor.RunMode.RawPower);
-        //frontRight.setRunMode(Motor.RunMode.RawPower);
+//        frontLeft.setRunMode(Motor.RunMode.RawPower);
+//        frontRight.setRunMode(Motor.RunMode.RawPower);
 
 
     }
@@ -57,8 +57,8 @@ public class DriveSubsystem extends SubsystemBase {
         // Send calculated power levels to the motors
         backLeft.set(left);
         backRight.set(right);
-        //frontLeft.set(left);
-        //frontRight.set(right);
+//        frontLeft.set(left);
+//        frontRight.set(right);
 
         // Telemetry updates
         telemetry.addData("Drive Motors", "Left (%.2f), Right (%.2f)", left, right);
@@ -68,7 +68,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void stop() {
         backLeft.stopMotor();
         backRight.stopMotor();
-        //frontRight.stopMotor();
-        //frontLeft.stopMotor();
+//        frontRight.stopMotor();
+//        frontLeft.stopMotor();
     }
 }

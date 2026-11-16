@@ -40,7 +40,7 @@ public class  BioBuzz extends CommandOpMode {
                 new RunCommand(() -> {
                     // Read inputs (Inverting stick Y because pushing up is natively negative)
                     double drive = gamepad1.right_stick_y;
-                    double turn = gamepad1.left_stick_x;
+                    double turn = - gamepad1.left_stick_x;
                     double right = -gamepad1.right_stick_x;
 
                     // Pass the inputs straight to your subsystem method
@@ -56,6 +56,10 @@ public class  BioBuzz extends CommandOpMode {
                 );
         gamePad2.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
                 new StartEndCommand(pushBallSubsystem::pushBall, pushBallSubsystem::stopServo, pushBallSubsystem)
+        );
+
+        gamePad2.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+                new StartEndCommand(pushBallSubsystem::reverse, pushBallSubsystem::stopServo, pushBallSubsystem)
         );
 
 

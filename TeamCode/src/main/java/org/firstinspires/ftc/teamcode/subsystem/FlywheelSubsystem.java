@@ -40,6 +40,7 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     public void stop() {
         motor.setPower(0);
+        greenLed.off();
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.seattlesolvers.solverslib.hardware.motors.Motor.RunMode;
 
 @TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
 @Disabled
@@ -60,10 +61,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
         //Sets encoder. We are not using an encoder right now so we leave this out
 
-        //frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //frontLeft.setRunMode(Motor.RunMode.);
+        //frontRight.setRunMode(Motor.RunMode.R);
+        //backLeft.setRunMode(Motor.RunMode.);
+        //backRight.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //Calibrates IMU. Set USB and logo facing direction to your actual hub orientation
 
@@ -106,8 +107,8 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         double backRightPower = forward + right - rotate;
         double backLeftPower = ((forward - right + rotate)*-1);
 
-        double maxPower = 0.5;
-        double maxSpeed = 0.5;  // make this slower for outreaches
+        double maxPower = 1.0;
+        double maxSpeed = 1.0;  // make this slower for outreaches
 
         //prevent motors from crossing 1.0 and exploding
 

@@ -28,18 +28,29 @@ public class PushBallSubsystem extends SubsystemBase {
         // Zero power behavior configuration
         this.launcherMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
-        // Adjust rotation direction if needed based on mounting layout (true or false)
-        this.launcherMotor.setInverted(false);
     }
 
 
     public void pushBall(){
+        // Adjust rotation direction if needed based on mounting layout (true or false)
+        this.launcherMotor.setInverted(false);
         telemetry.addData("Setting Servo power To 1","");
         telemetry.update();
         pushBall.setPower(1.0);
         telemetry.addData("launcher servo","power %.2f", pushBall.getPower());
         telemetry.update();
     }
+
+
+    public void reverse() {
+        this.launcherMotor.setInverted(true);
+        telemetry.addData("Setting Servo power To 1","");
+        telemetry.update();
+        pushBall.setPower(1.0);
+        telemetry.addData("launcher servo","power %.2f", pushBall.getPower());
+        telemetry.update();
+    }
+
     public void stopServo () {
         pushBall.setPower(0);
         telemetry.addData("launcher servo","power %.2f", pushBall.getPower());
