@@ -114,7 +114,6 @@ public abstract class BioBuzzAuto extends CommandOpMode {
     private static class MoveCommand extends CommandBase {
         private final AutoDriveSubsystem drive;
         private final double forwardIn, strafeIn, power;
-//hellothere
         MoveCommand(AutoDriveSubsystem drive, double forwardIn, double strafeIn, double power) {
             this.drive = drive;
             this.forwardIn = forwardIn;

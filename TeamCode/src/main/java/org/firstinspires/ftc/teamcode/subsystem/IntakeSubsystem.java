@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void in ()
     {
-        intakemotor.setVelocity(300);
+        intakemotor.setVelocity(500);
         intakeservoleft.setPower(1);
         intakeservoright.setPower(1);
     }

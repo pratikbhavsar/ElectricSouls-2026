@@ -25,14 +25,14 @@ public class DriveSubsystem extends SubsystemBase {
         this.frontRight = new MotorEx(hardwareMap, "frontRight");
 
         backLeft.setInverted(false);
-        backRight.setInverted(false);
-//        frontRight.setInverted(false);
-//        frontLeft.setInverted(false);
+        backRight.setInverted(true);
+        frontRight.setInverted(true);
+        frontLeft.setInverted(false);
         // Switch to RawPower to accept values from -1.0 to 1.0 (percent power)
         backLeft.setRunMode(Motor.RunMode.RawPower);
         backRight.setRunMode(Motor.RunMode.RawPower);
-//        frontLeft.setRunMode(Motor.RunMode.RawPower);
-//        frontRight.setRunMode(Motor.RunMode.RawPower);
+        frontLeft.setRunMode(Motor.RunMode.RawPower);
+        frontRight.setRunMode(Motor.RunMode.RawPower);
 
 
     }
@@ -42,7 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @param rotate Forward/backward movement (-1.0 to 1.0)
      * @param forward Turning movement (-1.0 to 1.0)
      */
-    public void drive(double forward, double rotate) {
+    public void drive(double forward, double strafe, double rotate) {
         double left  = forward + rotate;
         double right = forward - rotate;
 
@@ -57,8 +57,8 @@ public class DriveSubsystem extends SubsystemBase {
         // Send calculated power levels to the motors
         backLeft.set(left);
         backRight.set(right);
-//        frontLeft.set(left);
-//        frontRight.set(right);
+        //frontLeft.set(left);
+        //frontRight.set(right);
 
         // Telemetry updates
         telemetry.addData("Drive Motors", "Left (%.2f), Right (%.2f)", left, right);
@@ -68,7 +68,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void stop() {
         backLeft.stopMotor();
         backRight.stopMotor();
-//        frontRight.stopMotor();
-//        frontLeft.stopMotor();
+        frontRight.stopMotor();
+        frontLeft.stopMotor();
     }
 }

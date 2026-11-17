@@ -39,12 +39,12 @@ public class  BioBuzz extends CommandOpMode {
         mecanumDriveSubsystem.setDefaultCommand(
                 new RunCommand(() -> {
                     // Read inputs (Inverting stick Y because pushing up is natively negative)
-                    double drive = gamepad1.right_stick_y;
-                    double turn = - gamepad1.left_stick_x;
-                    double right = -gamepad1.right_stick_x;
+                    double drive = - gamepad1.left_stick_y;
+                    double turn = gamepad1.right_stick_x;
+                    double right = gamepad1.left_stick_x;
 
                     // Pass the inputs straight to your subsystem method
-                    mecanumDriveSubsystem.driveFieldRelative(drive, right, turn);
+                    mecanumDriveSubsystem.drive(drive, right, turn);
                 }, mecanumDriveSubsystem) // Passing driveSubsystem declares it as a requirement
         );
 

@@ -42,8 +42,8 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         this.frontLeft = new MotorEx(hardwareMap, "frontLeft");
         this.frontRight = new MotorEx(hardwareMap, "frontRight");
 
-        backLeft.setInverted(false);
-        backRight.setInverted(true);
+        backLeft.setInverted(true);
+        backRight.setInverted(false);
         frontLeft.setInverted(false);
         frontRight.setInverted(true);
 
@@ -102,13 +102,13 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
     public void drive(double forward, double right, double rotate) {
 
-        double frontLeftPower = ((forward + right + rotate)*-1);
-        double frontRightPower = (forward - right - rotate);
-        double backRightPower = forward + right - rotate;
-        double backLeftPower = ((forward - right + rotate)*-1);
+        double frontLeftPower  = ((forward + right + rotate));
+        double frontRightPower = (forward - right - rotate)*-1;
+        double backLeftPower   = ((forward - right + rotate)*-1);
+        double backRightPower  = (forward + right - rotate);
 
-        double maxPower = 1.0;
-        double maxSpeed = 1.0;  // make this slower for outreaches
+        double maxPower = 0.8;
+        double maxSpeed = 0.8;  // make this slower for outreaches
 
         //prevent motors from crossing 1.0 and exploding
 
