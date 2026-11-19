@@ -48,17 +48,17 @@ public class  BioBuzz extends CommandOpMode {
                 }, mecanumDriveSubsystem) // Passing driveSubsystem declares it as a requirement
         );
 
-        gamePad2.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
+        gamePad2.getGamepadButton(GamepadKeys.Button.B).whenHeld(
                 new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
         );
-        gamePad2.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+        gamePad2.getGamepadButton(GamepadKeys.Button.A).whenHeld(
                 new StartEndCommand(flywheelSubsystem::launch,flywheelSubsystem::stop, flywheelSubsystem)
                 );
-        gamePad2.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
+        gamePad2.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
                 new StartEndCommand(pushBallSubsystem::pushBall, pushBallSubsystem::stopServo, pushBallSubsystem)
         );
 
-        gamePad2.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+        gamePad2.getGamepadButton(GamepadKeys.Button.X).whenHeld(
                 new StartEndCommand(pushBallSubsystem::reverse, pushBallSubsystem::stopServo, pushBallSubsystem)
         );
 

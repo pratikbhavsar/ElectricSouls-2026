@@ -26,7 +26,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         // motor.setDirection(DcMotorSimple.Direction.REVERSE); // uncomment if it spins backwards
         motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        motor.setVelocityPIDFCoefficients(); // only change 1st value
+        motor.setVelocityPIDFCoefficients(300, 0, 0, 0); // only change 1st value
         telemetry.addData("MAX VELOCITY:", MAX_VELOCITY);
         telemetry.update();
         redLed.off();
@@ -45,14 +45,14 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        telemetry.addData("Flywheel power", motor.getPower());
+//        telemetry.addData("Flywheel power", motor.getPower());
         telemetry.addData("Current Velocity", motor.getVelocity());
         telemetry.update();
         setgreenLed();
     }
 
     public void setgreenLed() {
-        if(motor.getVelocity()>MAX_VELOCITY*0.9) {
+        if(motor.getVelocity()>=1050) {
             greenLed.on();
         } else {
             greenLed.off();

@@ -55,8 +55,8 @@ public class IntakeSubsystem extends SubsystemBase {
         double currentAmps = intakemotor.getCurrent(CurrentUnit.AMPS);
         double voltageVolts = batteryVoltageSensor.getVoltage();
         double powerWatts = currentAmps * voltageVolts;
-        this.telemetry.addData("Intake Current (A)", currentAmps);
-        this.telemetry.addData("Intake Power (W)", powerWatts);
-        this.telemetry.update();
+//        this.telemetry.addData("Intake Current (A)", currentAmps);
+//        this.telemetry.addData("Intake Power (W)", powerWatts);
+//        this.telemetry.update();
     }
 }

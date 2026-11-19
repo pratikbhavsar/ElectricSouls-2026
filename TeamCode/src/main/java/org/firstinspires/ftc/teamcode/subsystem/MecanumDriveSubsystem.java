@@ -19,8 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.hardware.motors.Motor.RunMode;
 
-@TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
-@Disabled
+//@TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
+//@Disabled
 public class MecanumDriveSubsystem extends SubsystemBase {
     // This declares the four motors needed
     private MotorEx frontLeft;
@@ -107,8 +107,8 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         double backLeftPower   = ((forward - right + rotate)*-1);
         double backRightPower  = (forward + right - rotate);
 
-        double maxPower = 0.8;
-        double maxSpeed = 0.8;  // make this slower for outreaches
+        double maxPower = 1.0;
+        double maxSpeed = 1.0;  // make this slower for outreaches
 
         //prevent motors from crossing 1.0 and exploding
 
