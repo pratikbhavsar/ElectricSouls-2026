@@ -41,24 +41,24 @@ public class  BioBuzz extends CommandOpMode {
                     // Read inputs (Inverting stick Y because pushing up is natively negative)
                     double drive = - gamepad1.left_stick_y;
                     double turn = gamepad1.right_stick_x;
-                    double right = gamepad1.left_stick_x;
+                    double right = gamepad1.left_stick_x; // can add a divide to make less sensitive
 
                     // Pass the inputs straight to your subsystem method
                     mecanumDriveSubsystem.drive(drive, right, turn);
                 }, mecanumDriveSubsystem) // Passing driveSubsystem declares it as a requirement
         );
 
-        gamePad2.getGamepadButton(GamepadKeys.Button.B).whenHeld(
+        gamePad2.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
                 new StartEndCommand(intakeSubsystem::in,intakeSubsystem::stop,intakeSubsystem)
         );
-        gamePad2.getGamepadButton(GamepadKeys.Button.A).whenHeld(
+        gamePad2.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new StartEndCommand(flywheelSubsystem::launch,flywheelSubsystem::stop, flywheelSubsystem)
                 );
-        gamePad2.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
+        gamePad2.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
                 new StartEndCommand(pushBallSubsystem::pushBall, pushBallSubsystem::stopServo, pushBallSubsystem)
         );
 
-        gamePad2.getGamepadButton(GamepadKeys.Button.X).whenHeld(
+        gamePad2.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
                 new StartEndCommand(pushBallSubsystem::reverse, pushBallSubsystem::stopServo, pushBallSubsystem)
         );
 

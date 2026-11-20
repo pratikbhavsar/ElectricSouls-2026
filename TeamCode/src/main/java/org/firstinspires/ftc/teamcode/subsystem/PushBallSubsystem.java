@@ -67,6 +67,10 @@ public class PushBallSubsystem extends SubsystemBase {
         launcherMotor.setVelocity(TARGET_LAUNCH_VELOCITY);
     }
 
+    public double getVelocity() {
+        return launcherMotor.getVelocity();
+    }
+
     /**
      * Stops the motor immediately.
      */

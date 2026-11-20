@@ -82,7 +82,9 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
             int avgTicks = getAverageEncoderTicks();
             if (avgTicks >= targetTicks) break;
 
-            double hold = 0.0; // Disabled heading hold to isolate pure motor powers
+            double error = 0 - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            telemetry.addData("IMU Yaw:", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            double hold = -0.02 * error;
 
             setMecanumPowers(power * direction, 0.0, hold);
             telemetry.addData("Alliance", isRed ? "RED (+1)" : "BLUE (-1)");
@@ -109,7 +111,8 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
             int avgTicks = getAverageEncoderTicks();
             if (avgTicks >= targetTicks) break;
 
-            double hold = 0.0;
+            double error = 0 - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            double hold = -0.02 * error;
 
             setMecanumPowers(0.0, power * direction, hold);
             telemetry.addData("Alliance", isRed ? "RED (+1)" : "BLUE (-1)");
@@ -213,7 +216,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
 
             if (opModeIsActive()) {
                 // 1. Launch pollens & start intake BEFORE any movements
-                launchPollens();
+//                launchPollens();
                 sleep(250);
 
                 // 2. 1 tile = 24 inches. Always drive in reverse (-24 in)
@@ -249,7 +252,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
-                driveStraight(0.3, -60.0);
+                driveStraight(0.3, -50.0);
             }
         }
     }
@@ -265,7 +268,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
 
             if (opModeIsActive()) {
                 // 1. Launch pollens & start intake BEFORE any movements
-                launchPollens();
+//                launchPollens();
                 sleep(250);
 
                 // 2. 1 tile reverse (-24 inches)
@@ -301,7 +304,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
-                driveStraight(0.3, -60.0);
+                driveStraight(0.3, -50.0);
             }
         }
     }
