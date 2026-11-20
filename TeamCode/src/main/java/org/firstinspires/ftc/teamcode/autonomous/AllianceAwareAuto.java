@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem;
@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystem.PushBallSubsystem;
 
 /**
  * Base abstract class and concrete Autonomous OpModes for Red & Blue alliances
- * (Near vs Far starting positions), utilizing the 24" FTC tile map grid,
+ * (Near vs Far starting positions), utilizing the 24" tile map grid,
  * always driving in reverse (launcher in back, intake in front), and alliance-aware sign flipping.
  */
 public abstract class AllianceAwareAuto extends LinearOpMode {
@@ -38,14 +38,14 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
     }
 
     protected void initHardware() {
-        fl = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        fr = hardwareMap.get(DcMotorEx.class, "frontRight");
-        bl = hardwareMap.get(DcMotorEx.class, "backLeft");
-        br = hardwareMap.get(DcMotorEx.class, "backRight");
+        fl = getDcMotorSafely(hardwareMap, "frontLeft", "front_left_drive", "left_front_drive", "leftFront");
+        fr = getDcMotorSafely(hardwareMap, "frontRight", "front_right_drive", "right_front_drive", "rightFront");
+        bl = getDcMotorSafely(hardwareMap, "backLeft", "back_left_drive", "left_back_drive", "leftBack");
+        br = getDcMotorSafely(hardwareMap, "backRight", "back_right_drive", "right_back_drive", "rightBack");
 
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.FORWARD); // Updated to FORWARD as requested
+        fr.setDirection(DcMotorSimple.Direction.FORWARD);
         br.setDirection(DcMotorSimple.Direction.FORWARD);
 
         for (DcMotorEx m : new DcMotorEx[]{fl, fr, bl, br}) {
@@ -56,12 +56,21 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
 
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP)));
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
         imu.resetYaw();
     }
 
-    /** Drive straight (+ forward, - reverse) */
+    private DcMotorEx getDcMotorSafely(HardwareMap hwMap, String... names) {
+        for (String name : names) {
+            try {
+                return hwMap.get(DcMotorEx.class, name);
+            } catch (Exception ignored) {}
+        }
+        throw new RuntimeException("Could not find motor with any of names: " + java.util.Arrays.toString(names));
+    }
+
+    /** Drive straight (+ forward, - reverse) with heading hold disabled temporarily for debugging */
     protected void driveStraight(double power, double inches) {
         resetEncoders();
         int targetTicks = (int) Math.round(Math.abs(inches) * TICKS_PER_INCH);
@@ -73,8 +82,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
             int avgTicks = getAverageEncoderTicks();
             if (avgTicks >= targetTicks) break;
 
-            double error = 0 - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            double hold = -0.02 * error;
+            double hold = 0.0; // Disabled heading hold to isolate pure motor powers
 
             setMecanumPowers(power * direction, 0.0, hold);
             telemetry.addData("Alliance", isRed ? "RED (+1)" : "BLUE (-1)");
@@ -101,8 +109,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
             int avgTicks = getAverageEncoderTicks();
             if (avgTicks >= targetTicks) break;
 
-            double error = 0 - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            double hold = -0.02 * error;
+            double hold = 0.0;
 
             setMecanumPowers(0.0, power * direction, hold);
             telemetry.addData("Alliance", isRed ? "RED (+1)" : "BLUE (-1)");
@@ -120,20 +127,19 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
         telemetry.addData("Status", "Starting intake & spinning up launcher...");
         telemetry.update();
 
-        intakeSubsystem.in();
-//        sleep(5000);// Start intake motor and servos
+        intakeSubsystem.in();       // Start intake motor and servos
         launcherSubsystem.launch(); // Spin up launcher flywheel
         sleep(1500);                 // Spin-up time
 
         int shots = 4;
         for (int i = 0; i < shots; i++) {
-//            ElapsedTime waitTimer = new ElapsedTime();
-//            waitTimer.reset();
-//            while (opModeIsActive() && launcherSubsystem.getVelocity() < 700.0 && waitTimer.seconds() < 2.0) {
-//                telemetry.addData("Velocity", "%.1f (Waiting for >= 700)", launcherSubsystem.getVelocity());
-//                telemetry.update();
-//                sleep(20);
-//            }
+            ElapsedTime waitTimer = new ElapsedTime();
+            waitTimer.reset();
+            while (opModeIsActive() && launcherSubsystem.getVelocity() < 700.0 && waitTimer.seconds() < 2.0) {
+                telemetry.addData("Velocity", "%.1f (Waiting for >= 700)", launcherSubsystem.getVelocity());
+                telemetry.update();
+                sleep(20);
+            }
 
             telemetry.addData("Status", "Firing pollen ball %d of %d (Vel: %.1f)", i + 1, shots, launcherSubsystem.getVelocity());
             telemetry.update();
@@ -153,16 +159,24 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
     protected void setMecanumPowers(double f, double s, double hold) {
         double pFl = f + s + hold;
         double pFr = -(f - s - hold);
-        double pBl = -(f - s - hold);
+        double pBl = f - s + hold; // Updated for FWD backLeft
         double pBr = f + s - hold;
 
         double maxM = Math.max(1.0, Math.max(Math.max(Math.abs(pFl), Math.abs(pFr)),
                 Math.max(Math.abs(pBl), Math.abs(pBr))));
 
-        fl.setPower(pFl / maxM);
-        fr.setPower(pFr / maxM);
-        bl.setPower(pBl / maxM);
-        br.setPower(pBr / maxM);
+        double finalFl = pFl / maxM;
+        double finalFr = pFr / maxM;
+        double finalBl = pBl / maxM;
+        double finalBr = pBr / maxM;
+
+        fl.setPower(finalFl);
+        fr.setPower(finalFr);
+        bl.setPower(finalBl);
+        br.setPower(finalBr);
+
+        telemetry.addData("Power FL | FR", "%.2f | %.2f", finalFl, finalFr);
+        telemetry.addData("Power BL | BR", "%.2f | %.2f", finalBl, finalBr);
     }
 
     protected int getAverageEncoderTicks() {
@@ -199,7 +213,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
 
             if (opModeIsActive()) {
                 // 1. Launch pollens & start intake BEFORE any movements
-//                launchPollens();
+                launchPollens();
                 sleep(250);
 
                 // 2. 1 tile = 24 inches. Always drive in reverse (-24 in)
@@ -235,7 +249,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
-                driveStraight(0.3, -50.0);
+                driveStraight(0.3, -60.0);
             }
         }
     }
@@ -251,7 +265,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
 
             if (opModeIsActive()) {
                 // 1. Launch pollens & start intake BEFORE any movements
-//                launchPollens();
+                launchPollens();
                 sleep(250);
 
                 // 2. 1 tile reverse (-24 inches)
@@ -287,7 +301,7 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
-                driveStraight(0.3, -50.0);
+                driveStraight(0.3, -60.0);
             }
         }
     }
