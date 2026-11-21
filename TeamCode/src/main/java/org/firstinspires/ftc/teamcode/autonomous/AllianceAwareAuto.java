@@ -138,11 +138,11 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
         for (int i = 0; i < shots; i++) {
             ElapsedTime waitTimer = new ElapsedTime();
             waitTimer.reset();
-            while (opModeIsActive() && launcherSubsystem.getVelocity() < 700.0 && waitTimer.seconds() < 2.0) {
-                telemetry.addData("Velocity", "%.1f (Waiting for >= 700)", launcherSubsystem.getVelocity());
-                telemetry.update();
-                sleep(20);
-            }
+//            while (opModeIsActive() && launcherSubsystem.getVelocity() < 700.0 && waitTimer.seconds() < 2.0) {
+//                telemetry.addData("Velocity", "%.1f (Waiting for >= 700)", launcherSubsystem.getVelocity());
+//                telemetry.update();
+//                sleep(20);
+//            }
 
             telemetry.addData("Status", "Firing pollen ball %d of %d (Vel: %.1f)", i + 1, shots, launcherSubsystem.getVelocity());
             telemetry.update();
@@ -248,11 +248,14 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 3. Cross 2 tiles across the field (48 inches)
-                strafe(0.4, 40.0, true);
+                strafe(0.4, 35.0, true);
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
                 driveStraight(0.3, -50.0);
+
+                strafe(0.4, 10, true);
+
             }
         }
     }
@@ -300,11 +303,13 @@ public abstract class AllianceAwareAuto extends LinearOpMode {
                 sleep(250);
 
                 // 3. Cross 2 tiles across field (auto-flipped for Blue)
-                strafe(0.4, -40.0, true);
+                strafe(0.4, -35.0, true);
                 sleep(250);
 
                 // 4. Park in reverse (2.5 tiles = 60 inches)
                 driveStraight(0.3, -50.0);
+
+                strafe(0.4, -10, true);
             }
         }
     }

@@ -17,7 +17,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     private final LED redLed;
 
     //private static final double LAUNCH_POWER = 0.09;// tune this
-    private static final int MAX_VELOCITY = 1200;
+    private static final int MAX_VELOCITY = 1300;
     public FlywheelSubsystem(HardwareMap hardwareMap, String motorName, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.greenLed = (LED) hardwareMap.get(LED.class, "greenLed");
@@ -52,7 +52,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     public void setgreenLed() {
-        if(motor.getVelocity()>=1050) {
+        if(motor.getVelocity()>=1200) {
             greenLed.on();
         } else {
             greenLed.off();
